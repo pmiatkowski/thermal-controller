@@ -1,0 +1,51 @@
+services:
+  # Enhanced thermal manager with Docker service control
+  thermal-manager:
+    build:
+      context: ./docker
+      dockerfile: Dockerfile
+    container_name: thermal-manager
+    restart: unless-stopped
+    privileged: true  # Required for CPU governor control
+    volumes:
+      - /sys:/sys:rw  # Access to CPU frequency scaling
+      - /proc:/proc:rw  # Access to system info with write permissions
+      - /var/run/docker.sock:/var/run/docker.sock  # Docker socket for service control
+      - .:/app/thermal:ro  # Access to compose file for project context
+    environment:
+      - TEMP_THRESHOLD=91                          # Temperature threshold in Celsius
+      - CHECK_INTERVAL=30                          # Check interval in seconds
+      - ENABLE_THERMAL_MANAGEMENT=true             # Enable/disable thermal management
+      - COMPOSE_PROJECT_NAME=thermal               # Docker compose project name
+      - SERVICES_TO_CONTROL=system-monitor         # Services to stop when overheated (coma-separated, i.e. system-monitor,example-service)
+    working_dir: /app/thermal
+    networks:
+      - monitoring
+
+
+  # System monitor (optional - for observability)
+  # This service will be stopped when temperature > 91°C
+  system-monitor:
+    image: prom/node-exporter:latest
+    container_name: system-monitor
+    restart: unless-stopped
+    ports:
+      - "9100:9100"
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+    networks:
+      - monitoring
+
+networks:
+  monitoring:
+    driver: bridge
+
+volumes:
+  thermal_data:
+    driver: local
