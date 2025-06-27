@@ -85,7 +85,6 @@ Edit `thermal.env` to customize behavior:
 
 - `thermal-manager` - The thermal management service itself (never stopped)
 - `system-monitor` - Node exporter for system monitoring (can be stopped)
-- `example-service` - Example nginx service (can be stopped)
 
 To control your own services:
 
