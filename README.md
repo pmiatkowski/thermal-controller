@@ -90,37 +90,7 @@ Edit `thermal.env` to customize behavior:
 To control your own services:
 
 1. Add them to this docker-compose.yml
-2. Add their names to `SERVICES_TO_CONTROL` in `thermal.env`
-
-## Example: Control MotionEye
-
-1. **Uncomment the motioneye service** in docker-compose.yml
-2. **Update thermal.env**:
-
-   ```bash
-   SERVICES_TO_CONTROL=motioneye,system-monitor
-   ```
-
-3. **Restart thermal management**:
-
-   ```bash
-   docker compose restart thermal-manager
-   ```
-
-## Manual Testing
-
-Test thermal protection manually:
-
-```bash
-# Check current temperature
-sensors
-
-# Simulate high temperature by temporarily lowering threshold
-docker exec thermal-manager sh -c 'export TEMP_THRESHOLD=30 && /app/temp_load.sh'
-
-# Watch logs to see services being stopped/started
-docker logs -f thermal-manager
-```
+2. Add their names to `SERVICES_TO_CONTROL` in `docker-compose.yml`
 
 ## Troubleshooting
 
