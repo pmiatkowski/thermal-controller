@@ -47,7 +47,7 @@ When temperature normalizes (≤ 91°C):
 
 ## Quick Start
 
-1. **Configure services to control** (edit `thermal.env`):
+1. **Configure services to control**:
 
    ```bash
    # Stop system-monitor and example-service when overheated
@@ -73,8 +73,6 @@ When temperature normalizes (≤ 91°C):
    ```
 
 ## Configuration Options
-
-Edit `thermal.env` to customize behavior:
 
 - `TEMP_THRESHOLD=91` - Temperature threshold in Celsius
 - `CHECK_INTERVAL=30` - How often to check temperature (seconds)  
